@@ -124,6 +124,7 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
+        print("Program Running...")
         self.running = True
         while self.running:
             ir = self.ram[self.pc]

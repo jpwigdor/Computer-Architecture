@@ -52,7 +52,7 @@ The above program is already hardcoded into the source file `cpu.py`. To run it,
 you will eventually:
 
 ```
-python3 ls8.py
+python3 ls8.
 ```
 
 but you'll have to implement those three above instructions first!
