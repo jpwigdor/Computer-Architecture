@@ -8,7 +8,19 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        self.ram = [0] * 256
+        self.reg = [0] * 8
+        self.pc = 0
+        self.running = False
+        self.LDI = 0b10000010
+        self.PRN = 0b01000111
+        self.HLT = 0b00000001
+
+    def ram_read(self, index):
+        return self.ram[index]
+
+    def ram_write(self, index, value):
+        self.ram[index] = value
 
     def load(self):
         """Load a program into memory."""
@@ -47,7 +59,7 @@ class CPU:
         """
 
         print(f"TRACE: %02X | %02X %02X %02X |" % (
-            self.pc,
+            self.pc,  # Program Counter
             # self.fl,
             # self.ie,
             self.ram_read(self.pc),
@@ -62,4 +74,25 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        running = True
+        while running:
+            ir = self.ram[self.pc]  # Instruction Register
+
+            if ir == self.LDI:  # sets a specified register to a specified value.
+                reg_num = self.ram[self.pc+1]
+                value = self.ram[self.pc+2]
+                self.reg[reg_num] = value
+                self.pc += 3
+
+            elif ir == self.PRN:  # Print numeric value stored in the given register
+                reg_num = self.ram[self.pc+1]
+                print(self.reg[reg_num])
+                self.pc += 2
+
+            elif ir == self.HLT:  # short for 'halt'. similar to `MOL` is short for "Mole" in chemistry
+                running = False
+                self.pc += 1
+
+            else:
+                print(f'Unkown instruction {ir} at address {self.pc}')
+                sys.exit(1)
